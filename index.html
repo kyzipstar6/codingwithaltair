@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Video Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f4f4f4;
+            color: #333;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        nav {
+            background: #34495e;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        nav a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .post {
+            background: white;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .post h2 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .code-block pre {
+            margin: 0;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .comments {
+            margin-top: 2rem;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 1rem;
+        }
+        
+        .comment {
+            background: #ecf0f1;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .comment-success {
+            background: #2ecc71;
+            color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Altair's Programming Video Blog</h1>
+        <p>Code tutorials, source files, and discussions</p>
+    </header>
+    
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#videos">Videos</a>
+        <a href="#about">About</a>
+    </nav>
+    
+    <div class="container">
+        <article class="post">
+            <h2>Timestamps on JavaFX and LineChart line styling</h2>
+            <div class="post-meta">Posted on January 22, 2026 | Category: JavaFX Charts</div>
+            
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <p>These are the crucial methods in the video written</p>
+            
+            <h3>Source Code:</h3>
+            <div class="code-block">
+                <pre><code>private void applyTheme(Scene scene) {
+			// JavaFX stylesheets must be loaded via URL; we write the CSS to a temp file at
+			// runtime.
+			final String css = """
+
+									.chart { -fx-background-color: #cbd5e1; }
+									.chart-plot-background {
+
+											-fx-background-insets: 0;
+											-fx-background-radius: 12;
+									}
+									.default-color0.chart-series-line { -fx-stroke: #dae97a; }
+									.default-color1.chart-series-line { -fx-stroke: #8cedf0; }
+									.default-color2.chart-series-line { -fx-stroke: #f08ceb; }
+									.default-color2.chart-series-line { -fx-stroke: #8af2b2; }
+
+							""";
+
+			try {
+					Path tmp = Files.createTempFile("theme", ".css");
+					Files.writeString(tmp, css, StandardCharsets.UTF_8);
+					tmp.toFile().deleteOnExit();
+					scene.getStylesheets().add(tmp.toUri().toString());
+			} catch (IOException ex) {
+					// If the stylesheet fails, keep the app usable (fall back to default JavaFX
+					// look).
+					ex.printStackTrace();
+			}
+	}
+
+	public HBox timestampsRow(String [] timestamps, Scene sc, LineChart cht){
+		/*
+		Simple timestamps box
+		*/
+		double scw = sc.getWidth();
+		int l = timestamps.length;
+		int separationOffset = 10;
+		int lscw = doubleToInt(scw/l)+separationOffset;
+		//int timestampseparator = ()
+
+
+		int maxtimestamps = 50;
+		int lbadd = (l<50)? l : maxtimestamps;
+		int mxldif = doubleToInt(l/50);
+		List<Label> lbs = new ArrayList<>();
+		for (int i = 0; i< lbadd;i++){
+			if(lbadd<=50&& l<=50)
+			lbs.add(new Label(timestamps[i]));
+			if(lbadd>50 && l>50){
+				if(i%mxldif==0)
+				lbs.add(new Label(timestamps[i]));
+			}
+		}
+		for(Label lb : lbs){
+			lb.setStyle("-fx-font-size: 20px; -fx-text-fill: #a45a62;");
+			lb.setMinWidth(100);
+		}
+		if(lbs.size()>8){
+			for(Label lb : lbs){
+				lb.setRotate(90);
+			}
+		}
+		HBox timestampholder = new HBox((lscw>50)? 50 :lscw);
+		timestampholder.getChildren().addAll(lbs);
+		timestampholder.setLayoutX(cht.getLayoutX()+20);
+		timestampholder.setLayoutY(400);
+		timestampholder.setMaxWidth(sc.getWidth()-300);
+		timestampholder.setPrefHeight(50);
+
+		return timestampholder;
+	}
+	public int doubleToInt(double d){
+		return Integer.parseInt(String.valueOf(Math.round(d)+""));
+	}</code></pre></div>
+    <p>Set easily the layout once the HBox is created:</p>
+            
+            <div class="code-block">
+                <pre><code>
+        //Make axis transparent            
+        xAx.setOpacity(0);
+		HBox tstampsrow = timestampsRow(timestamps,sc,cht);
+		/*
+        Uncomment to drag and drop the timestamps row to desired position
+		pn.setOnMouseMoved(e->{
+			tstampsrow.setLayoutX(e.getSceneX()-150);
+			tstampsrow.setLayoutY(e.getSceneY()-100);
+		});
+		pn.setOnMouseClicked(e->{
+			System.out.println("tstampsrow.setLayoutX("+tstampsrow.getLayoutX()+");");
+			System.out.println("tstampsrow.setLayoutY("+tstampsrow.getLayoutY()+");");
+		});
+		*/
+		tstampsrow.setLayoutX(50.0);
+		tstampsrow.setLayoutY(527.2);
+		pn.getChildren().add(tstampsrow);
+        //caling the method at the end:
+        applyTheme(sc);</code></pre>
+            </div>
+            
+            <button id="downloadBtn">Download Full Source Code</button>
+            
+            <div class="comments">
+                <h3>Comments (0)</h3>
+                
+                
+                
+                <div class="comment-form">
+                    <h4>Leave a Comment</h4>
+                    <input type="text" id="commentName" placeholder="Your Name" required>
+                    <input type="email" id="commentEmail" placeholder="Your Email" required>
+                    <textarea id="commentText" rows="4" placeholder="Your Comment" required></textarea>
+                    <button id="postCommentBtn">Post Comment</button>
+                </div>
+            </div>
+        </article>
+    </div>
+    
+    <script>
+        // Download Source Code Functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // The complete source code to download
+            const sourceCode = `private void applyTheme(Scene scene) {
+    // JavaFX stylesheets must be loaded via URL; we write the CSS to a temp file at
+    // runtime.
+    final String css = """
+
+                            .chart { -fx-background-color: #cbd5e1; }
+                            .chart-plot-background {
+
+                                    -fx-background-insets: 0;
+                                    -fx-background-radius: 12;
+                            }
+                            .default-color0.chart-series-line { -fx-stroke: #dae97a; }
+                            .default-color1.chart-series-line { -fx-stroke: #8cedf0; }
+                            .default-color2.chart-series-line { -fx-stroke: #f08ceb; }
+                            .default-color2.chart-series-line { -fx-stroke: 	#8af2b2; }
+
+                    """;
+
+    try {
+            Path tmp = Files.createTempFile("theme", ".css");
+            Files.writeString(tmp, css, StandardCharsets.UTF_8);
+            tmp.toFile().deleteOnExit();
+            scene.getStylesheets().add(tmp.toUri().toString());
+    } catch (IOException ex) {
+            // If the stylesheet fails, keep the app usable (fall back to default JavaFX
+            // look).
+            ex.printStackTrace();
+    }
+}
+
+public HBox timestampsRow(String [] timestamps, Scene sc, LineChart cht){
+    /*
+    Simple timestamps box
+    */
+    double scw = sc.getWidth();
+    int l = timestamps.length;
+    int separationOffset = 10;
+    int lscw = doubleToInt(scw/l)+separationOffset;
+    //int timestampseparator = ()
+
+
+    int maxtimestamps = 50;
+    int lbadd = (l<50)? l : maxtimestamps;
+    int mxldif = doubleToInt(l/50);
+    List<Label> lbs = new ArrayList<>();
+    for (int i = 0; i< lbadd;i++){
+        if(lbadd<=50&& l<=50)
+        lbs.add(new Label(timestamps[i]));
+        if(lbadd>50 && l>50){
+            if(i%mxldif==0)
+            lbs.add(new Label(timestamps[i]));
+        }
+    }
+    for(Label lb : lbs){
+        lb.setStyle("-fx-font-size: 20px; -fx-text-fill: #a45a62;");
+        lb.setMinWidth(100);
+    }
+    if(lbs.size()>8){
+        for(Label lb : lbs){
+            lb.setRotate(90);
+        }
+    }
+    HBox timestampholder = new HBox((lscw>50)? 50 :lscw);
+    timestampholder.getChildren().addAll(lbs);
+    timestampholder.setLayoutX(cht.getLayoutX()+20);
+    timestampholder.setLayoutY(400);
+    timestampholder.setMaxWidth(sc.getWidth()-300);
+    timestampholder.setPrefHeight(50);
+
+    return timestampholder;
+}
+
+public int doubleToInt(double d){
+    return Integer.parseInt(String.valueOf(Math.round(d)+""));
+}
+
+//Make axis transparent            
+xAx.setOpacity(0);
+HBox tstampsrow = timestampsRow(timestamps,sc,cht);
+/*
+Uncomment to drag and drop the timestamps row to desired position
+pn.setOnMouseMoved(e->{
+    tstampsrow.setLayoutX(e.getSceneX()-150);
+    tstampsrow.setLayoutY(e.getSceneY()-100);
+});
+pn.setOnMouseClicked(e->{
+    System.out.println("tstampsrow.setLayoutX("+tstampsrow.getLayoutX()+");");
+    System.out.println("tstampsrow.setLayoutY("+tstampsrow.getLayoutY()+");");
+});
+*/
+tstampsrow.setLayoutX(50.0);
+tstampsrow.setLayoutY(527.2);
+pn.getChildren().add(tstampsrow);`;
+
+            // Create a blob with the source code
+            const blob = new Blob([sourceCode], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            
+            // Create a temporary link and trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'JavaFX_Timestamps_SourceCode.java';
+            document.body.appendChild(a);
+            a.click();
+            
+            // Cleanup
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        });
+        
+        // Post Comment Functionality
+        document.getElementById('postCommentBtn').addEventListener('click', function() {
+            const name = document.getElementById('commentName').value.trim();
+            const email = document.getElementById('commentEmail').value.trim();
+            const commentText = document.getElementById('commentText').value.trim();
+            
+            // Validate inputs
+            if (!name || !email || !commentText) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Get current date
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Create new comment element
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'comment';
+            commentDiv.innerHTML = `
+                <strong>${escapeHtml(name)}</strong> - ${dateStr}
+                <p>${escapeHtml(commentText)}</p>
+            `;
+            
+            // Insert the new comment before the comment form
+            const commentForm = document.querySelector('.comment-form');
+            commentForm.parentNode.insertBefore(commentDiv, commentForm);
+            
+            // Update comment count
+            const commentHeader = document.querySelector('.comments h3');
+            const currentCount = parseInt(commentHeader.textContent.match(/\d+/)[0]);
+            commentHeader.textContent = `Comments (${currentCount + 1})`;
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'comment-success';
+            successMsg.textContent = 'Comment posted successfully!';
+            commentForm.parentNode.insertBefore(successMsg, commentForm);
+            
+            // Remove success message after 3 seconds
+            setTimeout(() => {
+                successMsg.remove();
+            }, 3000);
+            
+            // Clear form
+            document.getElementById('commentName').value = '';
+            document.getElementById('commentEmail').value = '';
+            document.getElementById('commentText').value = '';
+        });
+        
+        // Helper function to escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
