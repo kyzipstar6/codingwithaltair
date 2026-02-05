@@ -147,6 +147,67 @@
         <a href="#videos">Videos</a>
         <a href="#about">About</a>
     </nav>
+	<div class="container">
+        <article class="post">
+            <h2>Building exes of JavaFX applications with JPackage & Candle</h2>
+            <div class="post-meta">Posted on Feb 4, 2026 | Category: Jpackage</div>
+            
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/0ASRAHT45W4" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <p>Install first Wix Toolset</p>
+            <p>Then fill the code bellow and save it as a .ps1 file or copy-paste it at powershell</p>
+
+            <h3>Jpack.ps1:</h3>
+            <div class="code-block">
+                <pre><code>Set-Location "C:\Path\to\your\aplication"
+
+ jpackage `
+   --input "C:\Path\to\your\aplication" `
+   --name "My App" `
+   --main-jar "plotter.jar" `
+   --main-class "myapplicationpackage.MyAppMainClass" `
+   --type exe `
+   --dest "C:\Path\to\your\exe\output\other\than\input" `
+   --module-path "C:\Path\to\your\javafx\libraries" `
+   --add-modules javafx.controls,javafx.base,javafx.fxml `
+   --win-menu `
+   --win-dir-chooser `
+ 	--win-console `
+ --java-options "-cp app/build/bin" `  
+   --java-options "-Dprism.order=sw" `
+   --java-options "-Dprism.verbose=true" `
+   --java-options "-Djavafx.verbose=true"</code></pre></div>
+    <p>If it does not work, try adding this at your public void main(String args []) of your main class:</p>
+            
+            <div class="code-block">
+                <pre><code>
+       public static void main(String args[]) {
+		System.setProperty("prism.order", "d3d,sw");
+	    
+		launch(args);
+		}
+				</code></pre>
+            </div>
+            
+            <button id="downloadBtn">Download Full Source Code</button>
+            
+            <div class="comments">
+                <h3>Comments (0)</h3>
+                
+                
+                
+                <div class="comment-form">
+                    <h4>Leave a Comment</h4>
+                    <input type="text" id="commentName" placeholder="Your Name" required>
+                    <input type="email" id="commentEmail" placeholder="Your Email" required>
+                    <textarea id="commentText" rows="4" placeholder="Your Comment" required></textarea>
+                    <button id="postCommentBtn">Post Comment</button>
+                </div>
+            </div>
+        </article>
+    </div>
     
     <div class="container">
         <article class="post">
