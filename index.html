@@ -63,7 +63,7 @@
         }
         
         .code-block {
-            background: #282c34;
+            background: #a499e4;
             color: #abb2bf;
             padding: 1.5rem;
             border-radius: 5px;
@@ -147,6 +147,55 @@
         <a href="#videos">Videos</a>
         <a href="#about">About</a>
     </nav>
+	<div class="container">
+        <article class="post">
+            <h2>Bildschirmrekorder mit Java und ffmpeg</h2>
+            <div class="post-meta">Hinzugefügt ab Feb 24, 2026 | Category: ffmpeg</div>
+            
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/0ASRAHT45W4" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <p>Zuerst installieren bzw. laden Sie ffmpeg</p>
+            <p>Dann passen Sie den folgenden command an:</p>
+
+            <h3>bildschirmaufnehmen.bat:</h3>
+            <div class="code-block">
+                <pre><code>cd C:\Optional\Verzeichnis\zur\ausgabe
+
+ 				ffmpeg -f gdigrab -framerate 30 -i desktop -f dshow -i audio="Microphone (High Definition Audio Device)" 
+					-c:v libx264 -preset ultrafast -c:a aac -b:a 128k -pix_fmt yuv420p -movflags +faststart output.mp4
+				</code></pre></div>
+				<p>Ersetzen Sie "Microphone (High Definition Audio Device)" mit der Name ihres audiogerät oder loschen sie "audio=...", falls man kein audio aufnehmen werden willt.</p>
+            	<p>Die javax.swing programm, der wir bereits bauen, ist so geblieben:.</p>
+
+            <div class="code-block">
+                <pre><code>
+       public static void main(String args[]) {
+		System.setProperty("prism.order", "d3d,sw");
+	    
+		launch(args);
+		}
+				</code></pre>
+            </div>
+            
+            <button id="downloadBtn">Download Full Source Code</button>
+            
+            <div class="comments">
+                <h3>Comments (0)</h3>
+                
+                
+                
+                <div class="comment-form">
+                    <h4>Leave a Comment</h4>
+                    <input type="text" id="commentName" placeholder="Your Name" required>
+                    <input type="email" id="commentEmail" placeholder="Your Email" required>
+                    <textarea id="commentText" rows="4" placeholder="Your Comment" required></textarea>
+                    <button id="postCommentBtn">Post Comment</button>
+                </div>
+            </div>
+        </article>
+    </div>
 	<div class="container">
         <article class="post">
             <h2>Building exes of JavaFX applications with JPackage & Candle</h2>
@@ -524,3 +573,4 @@ pn.getChildren().add(tstampsrow);`;
 </body>
 
 </html>
+
