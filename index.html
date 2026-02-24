@@ -64,7 +64,7 @@
         
         .code-block {
             background: #a499e4;
-            color: #abb2bf;
+            font-color: black;
             padding: 1.5rem;
             border-radius: 5px;
             overflow-x: auto;
@@ -171,11 +171,60 @@
 
             <div class="code-block">
                 <pre><code>
-       public static void main(String args[]) {
-		System.setProperty("prism.order", "d3d,sw");
-	    
-		launch(args);
-		}
+import java.io.*;
+import javax.swing.*;
+
+public class ScreenRekorder extends JFrame {
+    
+    public ScreenRekorder(){
+            try{
+                String audioname = JOptionPane.showInputDialog("Enter the name of the file",new JFrame());
+            setTitle("Screen Rekorder");
+            Box left = Box.createVerticalBox();
+            JTextArea verzeichnis = new JTextArea();
+            JButton verzeichnisbrow = new JButton("Dateipfad öfnen");
+            JTextField outp = new JTextField();
+            JPanel verzeichnisp = new JPanel();
+            verzeichnisp.add(verzeichnis); verzeichnisp.add(verzeichnisbrow);
+            left.add(verzeichnisp); left.add(Box.createVerticalStrut(10));left.add(outp);
+
+
+            Button start = new Button("Aufname starten");
+            Button stoppen = new Button("Stop & speichern");
+            JPanel knopfen = new JPanel();
+
+            knopfen.add(start); knopfen.add(stoppen);
+            left.add(Box.createVerticalStrut(10));left.add(knopfen);
+            
+            //hier füge das Box left in das Frame hinzu;
+            add(left);
+            
+            start.addActionListener(e->{
+                FileWriter wr = new FileWriter("com.bat");
+                wr.write(starten());wr.close();
+                try{
+                    Thread.sleep(500);
+                 }  catch(InterruptedException ex2){}
+                ProcessBuilder pb = new ProcessBuilder("com.bat");
+                pb.inheritIO();
+                Process p = pb.start();
+            });
+        }catch(IOException ex){ex.printStackTrace();}
+    }
+    public void starten(String audioname, String verzeichnis){
+        
+        String batch = "cd "+verzeichnis + "\n "+
+        "ffmpeg -f gdigrab -framerate 30 -i desktop -f dshow -i audio=\""+
+        //hier eigenes Sound-Device hinzufügen
+        "Microphone (High Definition Audio Device)"+
+        "\" -c:v libx264"+
+        " -preset ultrafast -c:a aac -b:a 128k -pix_fmt yuv420p -movflags +faststart "+
+        //hier das audioname hinzufügen
+         audioname+
+         ".mp4";
+       
+    }
+}
 				</code></pre>
             </div>
             
@@ -573,4 +622,5 @@ pn.getChildren().add(tstampsrow);`;
 </body>
 
 </html>
+
 
