@@ -149,15 +149,15 @@
     </nav>
 	<div class="container">
         <article class="post">
-            <h2>Bildschirmrekorder mit Java und ffmpeg</h2>
-            <div class="post-meta">Hinzugefügt ab Feb 24, 2026 | Category: ffmpeg</div>
+            <h2>Bildschirmrekorder mit Java und Ffmpeg</h2>
+            <div class="post-meta">Hinzugefügt am Feb 24, 2026 | Category: ffmpeg</div>
             
             <div class="video-container">
                 <iframe src="https://www.youtube.com/embed/0ASRAHT45W4" frameborder="0" allowfullscreen></iframe>
             </div>
             
-            <p>Zuerst installieren bzw. laden Sie ffmpeg</p>
-            <p>Dann passen Sie den folgenden command an:</p>
+            <p>Zuerst installieren bzw. laden Sie ffmpeg herunter</p>
+            <p>Dann passen Sie den folgenden command zu eure Einstellung an:</p>
 
             <h3>bildschirmaufnehmen.bat:</h3>
             <div class="code-block">
@@ -166,8 +166,8 @@
  				ffmpeg -f gdigrab -framerate 30 -i desktop -f dshow -i audio="Microphone (High Definition Audio Device)" 
 					-c:v libx264 -preset ultrafast -c:a aac -b:a 128k -pix_fmt yuv420p -movflags +faststart output.mp4
 				</code></pre></div>
-				<p>Ersetzen Sie "Microphone (High Definition Audio Device)" mit der Name ihres audiogerät oder loschen sie "audio=...", falls man kein audio aufnehmen werden willt.</p>
-            	<p>Die javax.swing programm, der wir bereits bauen, ist so geblieben:.</p>
+				<p>Ersetzen Sie "Microphone (High Definition Audio Device)" mit der Name ihres Audiogerätes oder loschen Sie "audio=...", falls man kein audio aufgenommen werden willt.</p>
+            	<p>Man hat den javax.swing Programm, den wir bereits bauen, so verfasst:.</p>
 
             <div class="code-block">
                 <pre><code>
@@ -224,11 +224,14 @@ public class ScreenRekorder extends JFrame {
          ".mp4";
        
     }
+	public static void main(String [] args){
+		SwingUtilites.invokeLater(Screenrekorder::new);
+	}
 }
 				</code></pre>
             </div>
             
-            <button id="downloadBtn">Download Full Source Code</button>
+            <button id="downloadBtn">Quelldatei laden</button>
             
             <div class="comments">
                 <h3>Comments (0)</h3>
@@ -622,5 +625,6 @@ pn.getChildren().add(tstampsrow);`;
 </body>
 
 </html>
+
 
 
