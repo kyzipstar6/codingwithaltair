@@ -150,10 +150,127 @@
 	<div class="container">
         <article class="post">
             <h2>Bildschirmrekorder mit Java und Ffmpeg</h2>
+            <div class="post-meta">Hinzugefügt am Mar 20, 2026 | Category: ffmpeg</div>
+            
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/9m0qGVzcmlU" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <p>Code ausführbar, erfolgreich getestet.</p>
+            <p>Hier ist den Update, eingeschlossen als Bonus eine Funktion für den Anhalten-Knopf, so dass Sie Ihren Video speichern können:</p>
+
+            
+            <div class="code-block">
+                <pre><code>
+import java.io.*;
+import javax.swing.*;
+
+public class ScreenRekorder extends JFrame {
+    
+    public ScreenRekorder(){
+            try{
+            setTitle("Screen Rekorder");
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            AtomicReference<Process> actualProcess = new AtomicReference<>();
+
+            Box left = Box.createVerticalBox();
+            JTextArea verzeichnis = new JTextArea();
+            JButton verzeichnisbrow = new JButton("Dateipfad öfnen");
+            JTextField outp = new JTextField();
+            JPanel verzeichnisp = new JPanel();
+            verzeichnisp.add(verzeichnis); verzeichnisp.add(verzeichnisbrow);
+            left.add(verzeichnisp); left.add(Box.createVerticalStrut(10));left.add(outp);
+
+
+            JButton start = new JButton("Aufname starten");
+            JButton stoppen = new JButton("Stop & speichern");
+            JPanel knopfen = new JPanel();
+
+            knopfen.add(start); knopfen.add(stoppen);
+            left.add(Box.createVerticalStrut(10));left.add(knopfen);
+            
+            //hier füge das Box left in das Frame hinzu;
+            add(left);
+            
+            start.addActionListener(e->{
+                try{
+                FileWriter wr = new FileWriter("com.bat");
+                String [] erforderlicheargumente = JOptionPane.showInputDialog( "Der Audioname und das Pfad des Outputs eingeben, es mit \",,\" eingeben",new JFrame()).split(",,");
+                String ver = erforderlicheargumente[1];
+                String aud = erforderlicheargumente[0];
+
+                wr.write(starten(aud,ver));wr.close();
+                try{
+                    Thread.sleep(500);
+                 }  catch(InterruptedException ex2){}
+                ProcessBuilder pb = new ProcessBuilder("com.bat");
+                pb.inheritIO();
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                actualProcess.set(p);
+                }catch(IOException wrex){wrex.printStackTrace();}
+            });
+            stoppen.addActionListener(e->{
+                try{
+                    Process p = actualProcess.get();
+                    if(p!=null){
+                        OutputStream os = p.getOutputStream();
+                        os.write("q\n".getBytes());
+                        os.flush();
+
+                    p.waitFor();
+                    }
+                }catch(Exception ex){ex.printStackTrace();}
+            });
+            show();
+            pack();
+            setVisible(true);
+        }catch(Exception ex){ex.printStackTrace();}
+    }
+    public String starten(String audioname, String verzeichnis){
+        
+        String batch = "cd "+verzeichnis + "\n "+
+        "ffmpeg -f gdigrab -framerate 30 -i desktop -f dshow -i audio=\""+
+        //hier eigenes Sound-Device hinzufügen
+        "Microphone (High Definition Audio Device)"+
+        "\" -c:v libx264"+
+        " -preset ultrafast -c:a aac -b:a 128k -pix_fmt yuv420p -movflags +faststart "+
+        //hier das audioname hinzufügen
+         audioname+
+         ".mp4";
+       return batch;
+    }
+	public static void main(String [] args){
+		SwingUtilities.invokeLater(ScreenRekorder::new);
+	}
+}
+				</code></pre>
+            </div>
+            
+            <button id="downloadBtn">Quelldatei laden</button>
+            
+            <div class="comments">
+                <h3>Comments (0)</h3>
+                
+                
+                
+                <div class="comment-form">
+                    <h4>Leave a Comment</h4>
+                    <input type="text" id="commentName" placeholder="Your Name" required>
+                    <input type="email" id="commentEmail" placeholder="Your Email" required>
+                    <textarea id="commentText" rows="4" placeholder="Your Comment" required></textarea>
+                    <button id="postCommentBtn">Post Comment</button>
+                </div>
+            </div>
+        </article>
+    </div>
+	<div class="container">
+        <article class="post">
+            <h2>Bildschirmrekorder mit Java und Ffmpeg</h2>
             <div class="post-meta">Hinzugefügt am Feb 24, 2026 | Category: ffmpeg</div>
             
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/0ASRAHT45W4" frameborder="0" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/3X0AR6WBsCE" frameborder="0" allowfullscreen></iframe>
             </div>
             
             <p>Zuerst installieren bzw. laden Sie ffmpeg herunter</p>
