@@ -252,6 +252,15 @@ public class ScreenRekorder extends JFrame {
 
                 wr.write(starten(aud,ver,fenster.get()));wr.close();
                 try{
+
+				/*
+				*
+				*	Vorgeschlagene nicht getestete Modifizierung : Thread.sleep((aktVer.contains("desktop"))? 500: 5000); anstatt  Thread.sleep(500);
+				*	So hat man Zeit, die Fenster zu öfnnen bevor das Programm läuft.
+				*	Auch kann man nachdem "
+				* 	outp.append("Sie haben 10 Sekunde, um den ausgewählten Fenster zu öfnen \n"); 
+				*	"oder ähnliches hinzufügen
+				*/
                     Thread.sleep(500);
                  }  catch(InterruptedException ex2){}
                 ProcessBuilder pb = new ProcessBuilder("com.bat");
