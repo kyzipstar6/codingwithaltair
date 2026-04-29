@@ -150,6 +150,185 @@
 	<div class="container">
         <article class="post">
             <h2>Bildschirmrekorder mit Java und Ffmpeg</h2>
+            <div class="post-meta">Hinzugefügt am Apr 29, 2026 | Category: ffmpeg</div>
+            
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/9m0qGVzcalU" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <p>Code ausführbar, erfolgreich getestet.</p>
+            <p>Hier ist den getesten aktualisierte Code, das Fenstername funktionert nur, wann sie geöffnet und in Vollbildshirm ist, also denken sie daran, einen "try{Thread.sleep(5000)}catch(InterruptedExeption ex){}" bevor "proc.start();" zu hinzufügen, so dass Sie 5 Sekunde haben, um den App zu öffnen.]":</p>
+
+            
+            <div class="code-block">
+                <pre><code>
+import java.io.*;
+import javax.swing.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.awt.Dimension;
+
+public class ScreenRekorder extends JFrame {
+    
+    public ScreenRekorder(){
+            try{
+            setTitle("Screen Rekorder");
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            AtomicReference<Process> actualProcess = new AtomicReference<>();
+            AtomicReference<String> fenster = new AtomicReference<>("desktop");
+            AtomicReference<String> pfad = new AtomicReference<>("");
+
+
+            Box left = Box.createVerticalBox();
+            JTextArea verzeichnis = new JTextArea();
+            verzeichnis.setPreferredSize(new Dimension(200,20));
+
+            JTextArea namearea = new JTextArea();
+            namearea.setPreferredSize(new Dimension(100,20));
+
+            JButton verzeichnisbrow = new JButton("Dateipfad öfnen");
+            JTextArea outp = new JTextArea("Drucken Sie Aufnahme starten um schnell ein Videoaufnahme zu starten \n Mit dem Apps-Hinzufügen Knopfen darf man Anwendungen direkt aufnehmen.");
+            JPanel verzeichnisp = new JPanel();
+            Box vername = Box.createHorizontalBox();
+            
+            vername.add(new JLabel("Videoname"));vername.createHorizontalStrut(15);vername.add(namearea);
+                        vername.add(new JLabel("Pfad"));vername.createHorizontalStrut(15);vername.add(verzeichnis);
+                        vername.createHorizontalStrut(15);vername.add(verzeichnisbrow);
+
+            left.add(vername); left.add(Box.createVerticalStrut(10));left.add(outp);
+            Box fenstern = Box.createVerticalBox();
+            JButton fensternhinzu = new JButton("Apps hinzufügen");
+            JTextArea prozessausgabe = new JTextArea("");
+            outp.setPreferredSize(new Dimension(400,270));
+            //outp.setMaximumSize(new Dimension(300,300));
+            fensternhinzu.addActionListener(e->{
+                Box.createVerticalStrut(10);
+                String appname = JOptionPane.showInputDialog("Fenster name des Programms hinzufügen");
+                fenster.set(appname);
+                outp.append("Der Audio-fenstername wurde zu " + fenster.get() + " festgestellt. \n");
+
+                JButton nb = new JButton(appname);
+                nb.addActionListener(ev->{
+                    fenster.set(appname);
+                    outp.append("Der Audio-fenstername wurde zu " + fenster.get() + " festgestellt. \n");
+                    verzeichnis.setText(fenster.get());
+                });
+                fenstern.add(nb);
+                pack();
+            });
+            verzeichnisbrow.addActionListener(e->{
+                JFileChooser chooser = new JFileChooser();
+                int returnVal = chooser.showOpenDialog(new JFrame());
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                String ausgpfad =  chooser.getSelectedFile().getParent() +"";
+                pfad.set(new File(ausgpfad).getParent()+"");
+                verzeichnis.setText(ausgpfad);
+                }
+            });
+
+            JButton start = new JButton("Aufname starten");
+            JButton stoppen = new JButton("Stop & speichern");
+            JPanel knopfen = new JPanel();
+
+            knopfen.add(start); knopfen.add(stoppen);knopfen.add(fensternhinzu);
+            left.add(fenstern);left.add(Box.createVerticalStrut(10));left.add(knopfen);
+            
+            //hier füge das Box left in das Frame hinzu;
+            Box inhalt = Box.createHorizontalBox();
+            prozessausgabe.setPreferredSize(new Dimension(400,270));
+            inhalt.add(left);
+            
+            add(inhalt);
+
+            start.addActionListener(e->{
+                try{
+                FileWriter wr = new FileWriter("com.bat");
+                String aktVer = pfad.get();
+                String aktfenst = fenster.get();
+                String vname = namearea.getText();
+
+                String [] erforderlicheargumente = (vname+","+aktVer).split(",");
+                String ver = erforderlicheargumente[1];
+                String aud = (vname.equals(""))? JOptionPane.showInputDialog( "Der Audioname bitte eingeben",new JFrame()) : erforderlicheargumente[0] ;
+
+                wr.write(starten(aud,ver,fenster.get()));wr.close();
+                try{
+                    Thread.sleep(500);
+                 }  catch(InterruptedException ex2){}
+                ProcessBuilder pb = new ProcessBuilder("com.bat");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                    outp.append("Aufname startet... Sie wird in das verzeichnis " + new File("ver").getAbsolutePath() + "\n mit dem Name \""+ aud + "\" gespeichert. \n Drücken Sie \"Stoppen\" um die Aufname zu stoppen. \n");
+
+                actualProcess.set(p);
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                       outp.append( line + "\n");
+                       pack();
+                    }
+                }
+                }catch(IOException wrex){
+                    outp.setText("Problem bei der Ausführung der Videoaufnahme.");
+
+                    wrex.printStackTrace();}
+            });
+            stoppen.addActionListener(e->{
+                try{
+                    Process p = actualProcess.get();
+                    if(p!=null){
+                        OutputStream os = p.getOutputStream();
+                        os.write("q\n".getBytes());
+                        os.flush();
+
+                    p.waitFor();
+                    }
+                }catch(Exception ex){ex.printStackTrace();}
+            });
+            show();
+            pack();
+            setVisible(true);
+        }catch(Exception ex){ex.printStackTrace();}
+    }
+    public String starten(String audioname, String verzeichnis, String fenstName){
+        String fensterCommand = (!fenstName.equals("desktop")) ? "title=\""+fenstName+"\"" : fenstName;
+        String batch = "cd "+verzeichnis + "\n "+
+        "ffmpeg -f gdigrab -framerate 30 -i " + fensterCommand +" -f dshow -i audio=\""+
+        //hier eigenes Sound-Device hinzufügen
+        "Microphone (High Definition Audio Device)"+
+        "\" -c:v libx264"+
+        " -preset ultrafast -c:a aac -b:a 128k -pix_fmt yuv420p -movflags +faststart "+
+        //hier das audioname hinzufügen
+         audioname+
+         ".mp4";
+       return batch;
+    }
+	public static void main(String [] args){
+		SwingUtilities.invokeLater(ScreenRekorder::new);
+	}
+}
+				</code></pre>
+            </div>
+            
+            <button id="downloadBtn">Quelldatei laden</button>
+            
+            <div class="comments">
+                <h3>Comments (0)</h3>
+                
+                
+                
+                <div class="comment-form">
+                    <h4>Leave a Comment</h4>
+                    <input type="text" id="commentName" placeholder="Your Name" required>
+                    <input type="email" id="commentEmail" placeholder="Your Email" required>
+                    <textarea id="commentText" rows="4" placeholder="Your Comment" required></textarea>
+                    <button id="postCommentBtn">Post Comment</button>
+                </div>
+            </div>
+        </article>
+    </div>
+	<div class="container">
+        <article class="post">
+            <h2>Bildschirmrekorder mit Java und Ffmpeg</h2>
             <div class="post-meta">Hinzugefügt am Mar 20, 2026 | Category: ffmpeg</div>
             
             <div class="video-container">
